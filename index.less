@@ -1,6 +1,10 @@
-@import "syntax-variables";
+@color-for-value: rgba(86, 173, 154, 0.82);
+@color-for-information: #dc00ff;
+@color-for-local-variable: rgb(247, 132, 22);
+@color-for-symbol: rgb(221, 0, 0);
 
 atom-text-editor {
+  color: @color-for-local-variable;
   // background-color: @syntax-background-color;
   // color: @syntax-text-color;
 
@@ -51,61 +55,16 @@ atom-text-editor {
   }
 }
 
-
 // Syntax styles
-.syntax--source {
-  color: gray;
-  & > * {
-    color: white;
-  }
-}
+// .syntax--source, {
+//   color: @color-for-local-variable;
+// }
+
 .syntax--line .syntax--comment,
 .syntax--comment {
   opacity: 1 !important;
   color: #777777;
 }
-
-// These are local variables: the only reason they are called this,
-// is because we called them like it (private-ish)
-.syntax--object,
-.syntax--variable,
-// .syntax--definition,
-.syntax--entity,
-.syntax--primitive,
-.syntax--component {
-  // color: red;
-  color: rgb(247, 132, 22);
-}
-
-// These are property names: names that can be specific to libraries,
-// or define our public interface (public-ish)
-.syntax--property,
-.syntax--property-name,
-.syntax--key,
-.syntax--key .syntax--string,
-.syntax--method.syntax--name,
-.syntax--meta.syntax--method-call > .syntax--entity,
-.syntax--support.syntax--function,
-.syntax--storage.syntax--function,
-.syntax--attribute-name.syntax--jsx {
-  color: rgb(221, 0, 0);
-}
-
-.syntax--storage.syntax--function {
-  opacity: 1;
-}
-
-.syntax--builtin, .syntax--dom, .syntax--console,
-.syntax--language.syntax--variable /* this */ {
-  opacity: 1;
-  color: rgb(221, 0, 0);
-  text-decoration: underline;
-  text-decoration-color: rgba(255,255,255,.2);
-  text-decoration-skip: ink;
-}
-
-@color-for-value: rgba(86, 173, 154, 0.82);
-@color-for-information: #dc00ff;
 
 .syntax--quoted,
 .syntax--property-value,
@@ -121,6 +80,47 @@ atom-text-editor {
 }
 .syntax--meta.syntax--property-value * {
   color: @color-for-value !important;
+}
+
+// These are local variables: the only reason they are called this,
+// is because we called them like it (private-ish)
+.syntax--object,
+.syntax--variable,
+// .syntax--definition,
+.syntax--entity,
+.syntax--primitive,
+.syntax--component,
+.syntax--variable.syntax--constant {
+  // color: red;
+  color: @color-for-local-variable;
+}
+
+// These are property names: names that can be specific to libraries,
+// or define our public interface (public-ish)
+.syntax--property,
+.syntax--property-name,
+.syntax--key,
+.syntax--hashkey,
+.syntax--key .syntax--string,
+.syntax--method.syntax--name,
+.syntax--meta.syntax--method-call > .syntax--entity,
+.syntax--support.syntax--function,
+.syntax--storage.syntax--function,
+.syntax--attribute-name.syntax--jsx {
+  color: @color-for-symbol;
+}
+
+.syntax--storage.syntax--function {
+  opacity: 1;
+}
+
+.syntax--builtin, .syntax--dom, .syntax--console, .syntax--process,
+.syntax--language.syntax--variable /* this */ {
+  opacity: 1;
+  color: rgb(221, 0, 0);
+  text-decoration: underline;
+  text-decoration-color: rgba(255,255,255,.2);
+  text-decoration-skip: ink;
 }
 
 .syntax--bold {
@@ -149,7 +149,8 @@ atom-text-editor {
   }
 }
 
-.syntax--assignment,
+.syntax--assignment.syntax--keyword,
+.syntax--assignment.syntax--operator,
 .syntax--control,
 .syntax--ternary,
 .syntax--logical {
@@ -161,12 +162,18 @@ atom-text-editor {
 // NOTE Exceptions for JSX
 .syntax--jsx.syntax--assignment {
   opacity: 0.4;
-}
-.syntax--JSXNested {
-  color: @color-for-value;
+  color: inherit; // So it takes tag color, instead of white
 }
 .syntax--jsx.syntax--tag {
-  color: #a7a7a7;
+  color: @color-for-value;
+}
+.syntax--jsx.syntax--tag.syntax--name {
+  color: @color-for-symbol;
+}
+
+// NOTE
+.syntax--json.syntax--function .syntax--entity {
+  color: @color-for-symbol;
 }
 
 // NOTE Bracket matcher more obvious
