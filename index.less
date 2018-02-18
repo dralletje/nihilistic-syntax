@@ -1,7 +1,14 @@
 @color-for-value: rgba(86, 173, 154, 0.82);
-@color-for-information: #dc00ff;
+@color-for-information: #dc00ff; // TODO and NOTE
 @color-for-local-variable: rgb(247, 132, 22);
 @color-for-symbol: rgb(221, 0, 0);
+
+:root {
+  --color-for-value: @color-for-value;
+  --color-for-information: @color-for-information;
+  --color-for-local-variable: @color-for-local-variable;
+  --color-for-symbol: @color-for-symbol;
+}
 
 atom-text-editor {
   color: @color-for-local-variable;
@@ -64,6 +71,17 @@ atom-text-editor {
 .syntax--comment {
   opacity: 1 !important;
   color: #777777;
+}
+
+.syntax--markup.syntax--heading {
+  color: var(--color-for-symbol);
+}
+
+// TODO Unsure about these... Scope them all to markdown?
+.syntax--gfm.syntax--list,
+.syntax--marker,
+.syntax--hr {
+  opacity: 0.4;
 }
 
 .syntax--quoted,
@@ -129,6 +147,9 @@ atom-text-editor {
 .syntax--italic {
   font-style: italic;
 }
+.syntax--underline {
+  text-decoration: underline;
+}
 
 .syntax--todo,
 .syntax--note {
@@ -165,15 +186,64 @@ atom-text-editor {
   color: inherit; // So it takes tag color, instead of white
 }
 .syntax--jsx.syntax--tag {
-  color: @color-for-value;
+  color: @color-for-local-variable;
 }
 .syntax--jsx.syntax--tag.syntax--name {
   color: @color-for-symbol;
 }
 
 // NOTE
-.syntax--json.syntax--function .syntax--entity {
+.syntax--json.syntax--function > .syntax--entity {
   color: @color-for-symbol;
+}
+
+.syntax--graphql {
+  // If we are defining the type, I want all "variables"
+  // to be local variables: we are the ones that are defining the interface now
+  .syntax--type {
+    color: @color-for-symbol;
+  }
+
+  &.syntax--meta.syntax--type {
+    color: @color-for-local-variable;
+
+    .syntax--variable {
+      color: @color-for-local-variable;
+    }
+    .syntax--type {
+      color: @color-for-local-variable;
+    }
+    .syntax--builtin {
+      color: @color-for-symbol;
+    }
+  }
+
+  &.syntax--type.syntax--enum {
+    color: @color-for-local-variable;
+  }
+
+  &.syntax--variable {
+    color: @color-for-symbol;
+  }
+
+  // This is inside a query field (not schema/type definition, not query(...))
+  &.syntax--meta.syntax--arguments {
+    // field(**name**: **$var**) {
+    .syntax--variable {
+      color: @color-for-local-variable;
+    }
+    // field(**name**: $var) {
+    .syntax--arguments.syntax--variable {
+      color: @color-for-symbol;
+    }
+  }
+  // query(**$var**: "value") {
+  &.syntax--meta.syntax--variables .syntax--variable {
+    color: @color-for-local-variable;
+  }
+  &.syntax--fragment {
+    color: @color-for-local-variable;
+  }
 }
 
 // NOTE Bracket matcher more obvious
@@ -183,6 +253,7 @@ atom-text-editor {
   border-radius: 1px;
   opacity: .5;
 }
+
 
 
 //
